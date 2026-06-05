@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IRLab - Resume IR System</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Resume IR Workspace</p>
+        <h1>Find the right resumes for every job brief</h1>
+        <p class="muted">
+          Paste a full job description, tune the tokenizer & ranking strategy together,
+          and review the top-matching resumes as a team. Shareable experiment runs help
+          you compare setups with ground-truth labels.
+        </p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section id="search-section" class="panel panel-search">
+        <div class="panel-heading">
+          <div>
+            <h2>Search Resumes</h2>
+            <p class="muted">Paste a job description and choose how the index should behave.</p>
+          </div>
+        </div>
+
+        <label class="field-label" for="query">Job description / role summary</label>
+        <textarea id="query" placeholder="Drop in the role responsibilities, required skills, and expectations..."></textarea>
+
+        <div class="controls">
+          <label>Tokenizer
+            <select id="tokenizer">
+              <option value="resume_aware">Resume-aware</option>
+              <option value="simple">Simple</option>
+            </select>
+          </label>
+
+          <label>Ranking
+            <select id="index_type">
+              <option value="tfidf">TF-IDF</option>
+              <option value="tf">TF</option>
+              <option value="bm25">BM25</option>
+            </select>
+          </label>
+
+          <label>Top K
+            <input type="number" id="top_k" value="5" min="1" max="50">
+          </label>
+
+          <label class="toggle">
+            <input type="checkbox" id="remove_stopwords" checked>
+            <span>Remove stopwords</span>
+          </label>
+
+          <label class="toggle">
+            <input type="checkbox" id="use_stemming">
+            <span>Use stemming</span>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="search-btn" class="primary">Search resumes</button>
+          <p class="muted hint">Need annotated evaluation? Scroll down to run a metrics experiment.</p>
+        </div>
+      </section>
+
+      <section id="results-section" class="panel panel-results">
+        <div class="panel-heading">
+          <div>
+            <h2>Matching Resumes</h2>
+            <p id="results-info" class="muted">Enter a job description to see ranked resumes.</p>
+          </div>
+        </div>
+        <div id="results-list" class="results-grid"></div>
+      </section>
+    </main>
+
+    <section id="experiment-section" class="panel panel-experiments">
+      <div class="panel-heading">
+        <div>
+          <h2>Run Experiment (Metrics)</h2>
+          <p class="muted">Share JSON with known-relevant resume IDs to benchmark ranking strategies.</p>
+        </div>
+      </div>
+
+      <textarea id="experiment-json" placeholder='{
+  "queries": ["data engineer role", "machine learning engineer"],
+  "relevant_ids_list": [[1, 5, 7], [2, 3]]
+}'></textarea>
+
+      <div class="actions">
+        <button id="experiment-btn">Run experiment</button>
+        <p class="muted hint">IDs correspond to the `doc_id` column displayed above.</p>
+      </div>
+
+      <pre id="experiment-output">{}</pre>
+    </section>
+  </div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
